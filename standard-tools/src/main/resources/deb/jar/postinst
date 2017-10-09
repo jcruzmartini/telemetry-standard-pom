@@ -1,0 +1,23 @@
+#!/bin/sh
+set -e
+
+echo "creating symlink - /opt/${project.artifactId} -> /opt/${project.artifactId}-${project.version}"
+ln -s /opt/${project.artifactId}-${project.version} /opt/${project.artifactId} 2>/dev/null
+
+if [ "${deb.config.replace}" = "true" -a -d "/opt/${project.artifactId}/etc" ]; then
+	if [ -d "/etc/techner/${project.artifactId}" ]; then
+		echo "/etc/techner/${project.artifactId} directory already exists"
+		exit 1
+	fi
+
+	echo "creating symlink - /etc/techner/${project.artifactId} -> /opt/${project.artifactId}/etc"
+	[ -d "/etc/techner" ] || mkdir /etc/techner;
+	ln -s /opt/${project.artifactId}/etc /etc/techner/${project.artifactId};
+fi
+
+if [ -d "/opt/${project.artifactId}/init.d" ]; then
+	echo "creating symlink - /etc/init.d/techner/${project.artifactId} -> /opt/${project.artifactId}/init.d"
+	[ -d "/etc/init.d/techner" ] || mkdir /etc/init.d/techner;
+	chmod -R 755 /opt/${project.artifactId}/init.d/;
+	ln -s /opt/${project.artifactId}/init.d /etc/init.d/techner/${project.artifactId};
+fi

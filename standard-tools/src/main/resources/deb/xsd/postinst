@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+echo "creating symlink - /opt/${project.artifactId} -> /opt/${project.artifactId}-${project.version}";
+ln -s /opt/${project.artifactId}-${project.version} /opt/${project.artifactId} 2>/dev/null;

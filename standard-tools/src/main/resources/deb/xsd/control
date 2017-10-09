@@ -1,0 +1,11 @@
+Package: g2${project.artifactId}
+Version: ${project.version}-${deb.build}
+Section: g2
+Priority: optional
+Installed-Size:
+Architecture: ${deb.arch}
+Pre-Depends: ${deb.depends.pre}
+Depends: ${deb.depends}
+Replaces: g2${project.artifactId}
+Maintainer: g2
+Description: ${project.description}

@@ -1,0 +1,392 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.techner.standard</groupId>
+	<artifactId>standard</artifactId>
+	<!-- THIS VERSION AND PROPERTIES standard.version MUST BE IDENTICAL!!! ALSO 
+		MAKE SURE YOU UPDATE THE -jar AND -war POMS WHEN UPDATING THIS VERSION!!! 
+		The version here cannot be set dynamically and if ${project.version} is used 
+		in the plugin section to reference this version, it will actually reference 
+		the version of whatever pom started the maven process. I.e. running "mvn 
+		site" against board-search-component-common 1.2.1 will replace ${project.version} 
+		with 1.2.1 instead of whatever is specified here. -->
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<name>TECHNER grandparent pom</name>
+
+	<properties>
+		<!-- version of this standards, MUST MATCH version ABOVE! -->
+		<standard.version>1.0.0</standard.version>
+
+		<!-- global settings -->
+		<encoding>UTF-8</encoding>
+		<jdk.version>1.7</jdk.version>
+
+		<!-- dependencies -->
+		<commons-collections.version>3.2.1</commons-collections.version>
+		<commons-configuration.version>1.8</commons-configuration.version>
+		<commons-email.version>1.2</commons-email.version>
+		<commons-dbcp.version>1.4</commons-dbcp.version>
+		<commons-jxpath.version>1.3</commons-jxpath.version>
+		<jcip.version>1.0</jcip.version>
+		<guice.version>3.0</guice.version>
+		<guava.version>11.0.2</guava.version>
+		<jackson.version>2.2.2</jackson.version>
+		<mybatis.version>3.1.1</mybatis.version>
+		<mybatis-guice.version>3.3</mybatis-guice.version>
+		<mysql.version>5.1.20</mysql.version>
+		<commons-lang3.version>3.1</commons-lang3.version>
+
+		<!-- logging -->
+		<slf4j.version>1.6.4</slf4j.version>
+		<log4j.version>1.2.16</log4j.version>
+
+		<!-- testing -->
+		<junit.version>4.10</junit.version>
+		<mockito.version>1.9.0</mockito.version>
+
+		<!-- plugins -->
+		<eclipse.lifecycle>1.0.0</eclipse.lifecycle>
+		<jdeb.version>0.10</jdeb.version>
+		<maven-compiler.version>2.3.2</maven-compiler.version>
+		<maven-dependency.version>2.4</maven-dependency.version>
+		<maven-surefire.version>2.14.1</maven-surefire.version>
+		<maven-cobertura.version>2.5.1</maven-cobertura.version>
+		<maven-build-helper.version>1.7</maven-build-helper.version>
+		<maven-resources.version>2.5</maven-resources.version>
+		<maven-javadoc.version>2.8.1</maven-javadoc.version>
+		<maven-doxia.version>1.2</maven-doxia.version>
+		<maven-assembly.version>2.3</maven-assembly.version>
+		<maven-war.version>2.1.1</maven-war.version>
+		<maven-site.version>3.0</maven-site.version>
+		<maven-deploy.version>2.7</maven-deploy.version>
+		<maven-clean.version>2.4.1</maven-clean.version>
+		<maven-checkstyle.version>2.10</maven-checkstyle.version>
+		<maven-pmd.version>2.7.1</maven-pmd.version>
+		<jetty-maven.version>8.1.7.v20120910</jetty-maven.version>
+
+		<!-- debian settings -->
+		<deb.main><!-- Override this in your child pom. -->
+		</deb.main>
+		<deb.main.args><!-- Override with command line args. -->
+		</deb.main.args>
+		<deb.build>1</deb.build>
+		<deb.arch>i386</deb.arch>
+		<deb.depends></deb.depends>
+		<deb.depends.pre><!-- Override this in your child pom. -->
+		</deb.depends.pre>
+		<!-- replace the /etc/g2/<artifactId> directory -->
+		<deb.config.replace>true</deb.config.replace>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.jcip</groupId>
+			<artifactId>jcip-annotations</artifactId>
+			<version>${jcip.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-assistedinject</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-throwingproviders</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-multibindings</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+			<version>${junit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<scope>test</scope>
+			<version>${mockito.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>${commons-email.version}</version>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>commons-configuration</groupId>
+				<artifactId>commons-configuration</artifactId>
+				<version>${commons-configuration.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>${commons-collections.version}</version>
+			</dependency>
+			<!--<dependency>
+				<groupId>commons-jxpath</groupId>
+				<artifactId>commons-jxpath</artifactId>
+				<version>${commons-jxpath.version}</version>
+			</dependency>-->
+
+			<!--			
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>${commons-codec.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-dbcp</groupId>
+				<artifactId>commons-dbcp</artifactId>
+				<version>${commons-dbcp.version}</version>
+			</dependency>-->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+<!--	
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-core</artifactId>
+				<version>${lucene.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-analyzers</artifactId>
+				<version>${lucene.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-guice</artifactId>
+				<version>${mybatis-guice.version}</version>
+			</dependency>
+-->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
+<!--
+			<dependency>
+				<groupId>postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgresql.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>${apache-httpcomponents.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-all</artifactId>
+				<version>${apache-activemq.version}</version>
+			</dependency>
+-->
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${maven-deploy.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler.version}</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven-site.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.doxia</groupId>
+						<artifactId>doxia-module-confluence</artifactId>
+						<version>${maven-doxia.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<inputEncoding>${encoding}</inputEncoding>
+					<outputEncoding>${encoding}</outputEncoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire.version}</version>
+				<configuration>
+					<argLine>-XX:-UseSplitVerifier</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${maven-dependency.version}</version>
+					<executions>
+						<execution>
+							<id>copy-deb</id>
+							<phase>generate-resources</phase>
+							<goals>
+								<goal>unpack-dependencies</goal>
+							</goals>
+							<configuration>
+								<includeArtifactIds>standard-tools</includeArtifactIds>
+								<overWriteIfNewer>false</overWriteIfNewer>
+								<outputDirectory>${project.build.directory}/generated-resources</outputDirectory>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<!-- This plugin is needed as Eclipse doesn't understand how to handle 
+						the maven-dependency-plugin. It throws an error message saying it doesn't 
+						support the "unpack-dependencies" goal. Eclipse is lying to you, this plugin 
+						tells it to shut it's mouth and do it anyways. -->
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>${eclipse.lifecycle}</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[2.0.0,)</versionRange>
+										<goals>
+											<goal>unpack-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle.version}</version>
+				<configuration>
+					<configLocation>${project.build.directory}/generated-resources/checkstyle.xml</configLocation>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>checkstyle</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${maven-pmd.version}</version>
+				<configuration>
+					<targetJdk>${jdk.version}</targetJdk>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${maven-cobertura.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>${maven-surefire.version}</version>
+				<configuration>
+					<parallel>classes</parallel>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+	<modules>
+		<module>standard-tools</module>
+		<module>standard-war</module>
+		<module>standard-jar</module>
+	</modules>
+</project>

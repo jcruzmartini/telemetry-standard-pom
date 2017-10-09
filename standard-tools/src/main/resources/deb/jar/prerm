@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+if [ -L "/etc/init.d/techner/${project.artifactId}" ]; then
+	echo "removing symlink - /etc/init.d/techner/${project.artifactId}"
+	rm /etc/init.d/techner/${project.artifactId};
+fi;
+
+if [ "${deb.config.replace}" = "true" -a -L "/etc/techner/${project.artifactId}" ]; then
+	echo "removing symlink - /etc/techner/${project.artifactId}"
+	rm /etc/techner/${project.artifactId};
+fi;
+
+if [ -L "/opt/${project.artifactId}" ]; then
+	echo "removing symlink - /opt/${project.artifactId}";
+	rm /opt/${project.artifactId};
+fi;
+

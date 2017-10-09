@@ -1,0 +1,98 @@
+                   ,----,                                                                               
+                 ,/   .`|                      ,--.                                                     
+  .--.--.      ,`   .'  : ,---,              ,--.'|    ,---,       ,---,       ,-.----.       ,---,     
+ /  /    '.  ;    ;     /'  .' \         ,--,:  : |  .'  .' `\    '  .' \      \    /  \    .'  .' `\   
+|  :  /`. /.'___,/    ,'/  ;    '.    ,`--.'`|  ' :,---.'     \  /  ;    '.    ;   :    \ ,---.'     \  
+;  |  |--` |    :     |:  :       \   |   :  :  | ||   |  .`\  |:  :       \   |   | .\ : |   |  .`\  | 
+|  :  ;_   ;    |.';  ;:  |   /\   \  :   |   \ | ::   : |  '  |:  |   /\   \  .   : |: | :   : |  '  | 
+ \  \    `.`----'  |  ||  :  ' ;.   : |   : '  '; ||   ' '  ;  :|  :  ' ;.   : |   |  \ : |   ' '  ;  : 
+  `----.   \   '   :  ;|  |  ;/  \   \'   ' ;.    ;'   | ;  .  ||  |  ;/  \   \|   : .  / '   | ;  .  | 
+  __ \  \  |   |   |  ''  :  | \  \ ,'|   | | \   ||   | :  |  ''  :  | \  \ ,';   | |  \ |   | :  |  ' 
+ /  /`--'  /   '   :  ||  |  '  '--'  '   : |  ; .''   : | /  ; |  |  '  '--'  |   | ;\  \'   : | /  ;  
+'--'.     /    ;   |.' |  :  :        |   | '`--'  |   | '` ,/  |  :  :        :   ' | \.'|   | '` ,/   
+  `--'---'     '---'   |  | ,'        '   : |      ;   :  .'    |  | ,'        :   : :-'  ;   :  .'     
+                       `--''          ;   |.'      |   ,.'      `--''          |   |.'    |   ,.'       
+                                      '---'        '---'                       `---'      '---'         
+^`'~*-,._.,-*~'`^`'~*-,._.,-*~'`^`'~*-,._.,-*~'`^`'~*-,._.,-*~'`^`'~*-,._.,-*~'`^`'~*-,._.,-*~'`^`'~*-,
+
+Q. How do I use the new standard pom?
+A. In your pom, update your parent pom to be one of the following
+War:
+	<parent>
+		<groupId>com.g2llc.standard</groupId>
+		<artifactId>standard-war</artifactId>
+		<version>3.X.Y</version>
+	</parent>
+
+	Add the following to your <plugins> section of your <build> section.
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-dependency-plugin</artifactId>
+	</plugin>
+	<plugin>
+		<groupId>org.vafer</groupId>
+		<artifactId>jdeb</artifactId>
+	</plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-war-plugin</artifactId>
+	</plugin>
+
+Jar:
+	<parent>
+		<groupId>com.g2llc.standard</groupId>
+		<artifactId>standard-jar</artifactId>
+		<version>3.X.Y</version>
+	</parent>
+
+	Add the following to your <plugins> section of your <build> section.
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-dependency-plugin</artifactId>
+	</plugin>
+	<plugin>
+		<groupId>org.codehaus.mojo</groupId>
+		<artifactId>appassembler-maven-plugin</artifactId>
+	</plugin>
+	<plugin>
+		<groupId>org.vafer</groupId>
+		<artifactId>jdeb</artifactId>
+	</plugin>
+
+Then remove any dependencies that are now declared as part of the new pom structure.
+
+Q. How do I now build a debian package?
+A. For jars, declare a property value of deb.main with the full package name of your main class.
+You can also specify any additional command line arguments with deb.main.args.
+E.g.
+<properties>
+	<deb.main>com.g2llc.board.search.etl.Main</deb.main>
+	<deb.main.args>-Xms16m -Xmx16m</deb.main.args>
+</properties>
+
+For wars, nothing special needs to be done.
+
+Then use "mvn package" to create your debian package.  The debian package will be created in your
+target directory and will be named g2<artifactId>-<version>_<debian build version>-<architecture>.deb
+
+Q. What if I need configuration files?
+A. Simply create a src/main/resources/etc directory and mvn package will handle the rest.
+This will create an /etc/g2/<artifact id> symlink pointing to /opt/<artifact id>/etc.
+
+Q. What if I need an init.d script?
+A. Simply create a src/main/resources/init.d directory and place whatever files you need in there,
+mvn package will symlink /etc/init.d/g2/<artifact id> to that directory.
+
+Q. What if I need a custom debian steps, or a custom build number.
+A. All of the trivial debian settings are specified in the standard/pom.xml properties.  They all
+start with "deb." and can be overwritten in your projects pom.
+
+If you need further modification (e.g. your own postinst/postrm scripts), you can override the 
+default debian files by creating your own src/main/resources/deb directory and placing your custom
+versions in there.  
+
+Q. What if I don't want the debian package to overwrite my configuration files in /etc?
+A. Set the deb.config.replace property to false in your project's pom.
+<properties>
+	<deb.config.replace>false</deb.config.replace>
+</properties>

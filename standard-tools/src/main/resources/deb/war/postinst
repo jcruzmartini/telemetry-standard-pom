@@ -1,0 +1,39 @@
+#!/bin/sh
+set -e
+
+echo "creating symlink - /opt/${project.artifactId} -> /opt/${project.artifactId}-${project.version}"
+ln -s /opt/${project.artifactId}-${project.version} /opt/${project.artifactId} 2>/dev/null
+
+if [ ! -d "/etc/techner/${project.artifactId}" ]; then
+		echo "creating directory /etc/techner/${project.artifactId}"
+		mkdir -p /etc/techner/${project.artifactId}
+fi
+
+if [ ! -d "/opt/${project.artifactId}/etc" ]; then
+		echo "/opt/${project.artifactId}/etc directory does not exist"
+fi
+
+echo "checking if /etc/techner/${project.artifactId} exists"
+if ${deb.config.replace}; then
+		cp -f /opt/${project.artifactId}/etc/*.* /etc/techner/${project.artifactId}
+else
+		for path in /opt/${project.artifactId}/etc/*
+		do
+			echo "found file" $path
+                        file=$(basename $path)
+			if [ ! -f /etc/techner/${project.artifactId}/$file ]; then
+                            echo "/etc/techner/${project.artifactId}/$file does not exist - creating ..."
+			    cp $path /etc/techner/${project.artifactId}
+			fi
+		done
+		
+fi
+
+if [ -f "/etc/techner/${project.artifactId}/context.xml" -a ! -L /opt/jetty/webapps/${deployment.name}.xml ]; then
+	echo "installing context - /opt/jetty/webapps/${deployment.name}.xml"
+	ln -s /etc/techner/${project.artifactId}/context.xml /opt/jetty/webapps/${deployment.name}.xml 2>/dev/null
+fi
+
+echo "installing war - /opt/jetty/webapps/${deployment.name}.war"
+ln -s /opt/${project.artifactId}/${project.artifactId}-${project.version}.war /opt/jetty/webapps/${deployment.name}.war 2>/dev/null
+

@@ -1,0 +1,35 @@
+#!/bin/bash
+# @author csnodgrass
+# @since 2012-05-07
+#
+# helper script for updating all the version numbers in the standard pom that
+# are required to be exactly the same
+#
+# Usages
+# ./update-version <old number> <new number>
+
+# array of files that need to be updated
+FILES="pom.xml standard-tools/pom.xml standard-jar/pom.xml standard-war/pom.xml "
+
+if [ $# -ne 2 ]; then
+	echo "Usage: "
+	echo -e "\t`basename $0` <old version> <new version>"
+	exit -1
+fi
+
+OLD_VERSION=$1
+NEW_VERSION=$2
+
+echo "cleaning"
+mvn -q clean
+
+if [ $? != 0 ]; then
+	echo "error occurred while executing \"mvn clean\""
+	exit -1
+fi
+
+for f in $FILES
+do
+	echo "updating version in $f from $OLD_VERSION to $NEW_VERSION"
+	sed -i -e "s/<version>$OLD_VERSION<\/version>/<version>$NEW_VERSION<\/version>/g" -e "s/<standard.version>$OLD_VERSION<\/standard.version>/<standard.version>$NEW_VERSION<\/standard.version>/g" "$f" 
+done

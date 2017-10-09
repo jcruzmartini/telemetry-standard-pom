@@ -1,0 +1,11 @@
+Package: techner${project.artifactId}
+Version: ${project.version}-${deb.build}
+Section: techner
+Priority: optional
+Installed-Size:
+Architecture: ${deb.arch}
+Pre-Depends: ${deb.depends.pre}
+Depends: ${deb.depends}
+Replaces: techner${project.artifactId}
+Maintainer: techner
+Description: ${project.description}

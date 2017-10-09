@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+if [ -L "/opt/jetty/webapps/${deployment.name}.war" ]; then
+	echo "removing war - /opt/jetty/webapps/${deployment.name}.war";
+	rm /opt/jetty/webapps/${deployment.name}.war;
+fi;
+
+if [ -f "/opt/jetty/webapps/${deployment.name}.xml" ]; then
+	echo "removing context - /opt/jetty/webapps/${deployment.name}.xml";
+	rm /opt/jetty/webapps/${deployment.name}.xml;
+fi;
+
+if [ -L "/opt/${project.artifactId}" ]; then
+	echo "removing symlink - /opt/${project.artifactId}";
+	rm /opt/${project.artifactId};
+fi;
